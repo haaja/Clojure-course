@@ -13,23 +13,11 @@
 (defn pair? [hand]
   (>= (apply max (vals (frequencies (map rank hand)))) 2))
 
-(defn two-pairs? [hand]
-  (or 
-    (= 2 (get (frequencies (vals (frequencies (map rank hand)))) 2))
-    (= 1 (get (frequencies (vals (frequencies (map rank hand)))) 4))))
-
 (defn three-of-a-kind? [hand]
   (== (apply max (vals (frequencies (map rank hand)))) 3))
 
 (defn four-of-a-kind? [hand]
   (== (apply max (vals (frequencies (map rank hand)))) 4))
-
-(defn straight? [hand]
-  (let [ sorted (sort (map rank hand)) smallest (first sorted)
-        alt (sort (replace {14 1} sorted)) alt-smallest (first alt) ]
-    (or
-      (= sorted (range smallest (+ smallest 5)))
-      (= alt (range alt-smallest (+ alt-smallest 5))))))
 
 (defn flush? [hand]
   (apply = (map second hand)))
@@ -37,6 +25,18 @@
 (defn full-house? [hand]
   (let [ ranks (mapv (fn [card] (rank card)) hand) ]
     (= (sort (vals (frequencies ranks))) (seq [2 3]))))
+
+(defn two-pairs? [hand]
+  (or 
+    (= 2 (get (frequencies (vals (frequencies (map rank hand)))) 2))
+    (= 1 (get (frequencies (vals (frequencies (map rank hand)))) 4))))
+
+(defn straight? [hand]
+  (let [ sorted (sort (map rank hand)) smallest (first sorted)
+        alt (sort (replace {14 1} sorted)) alt-smallest (first alt) ]
+    (or
+      (= sorted (range smallest (+ smallest 5)))
+      (= alt (range alt-smallest (+ alt-smallest 5))))))
 
 (defn straight-flush? [hand]
   (and
